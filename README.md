@@ -1,52 +1,181 @@
 # Do_After - 待办事项管理系统
 
-本项目为"Do_After"，用于记录和管理待办事项或后续行动。
+🚀 一个功能完整的待办事项管理系统，支持用户认证、任务管理和数据持久化。
 
-## 技术栈
+## ✨ 主要功能
+
+- 👤 **用户系统**: 注册、登录、JWT认证
+- 📝 **待办事项管理**: 创建、查看、更新、删除任务
+- 🏷️ **任务分类**: 优先级设置、标签管理
+- 📊 **数据统计**: 任务完成情况统计
+- 🌐 **局域网支持**: 支持移动设备局域网访问
+- 🔐 **安全保障**: 密码加密、JWT令牌验证
+
+## 🛠️ 技术栈
 
 ### 后端
 - **Node.js** - JavaScript运行环境
 - **Express.js** - Web应用框架
+- **PostgreSQL** - 关系型数据库
+- **Sequelize** - ORM框架
+- **JWT** - 身份认证
+- **bcryptjs** - 密码加密
 - **CORS** - 跨域资源共享
-- **dotenv** - 环境变量管理
 
-## 项目结构
+## 📁 项目结构
 
 ```
 Do_After/
-├── server.js          # 主服务器文件
-├── routes/             # API路由
-│   └── todos.js       # 待办事项路由
-├── package.json       # 项目依赖配置
-├── .env              # 环境变量配置
-├── .gitignore        # Git忽略文件
-├── API.md            # API文档
-└── README.md         # 项目说明
+├── server.js              # 主服务器文件
+├── config/
+│   └── database.js        # 数据库配置
+├── models/                # 数据模型
+│   ├── index.js          # 模型索引
+│   ├── User.js           # 用户模型
+│   └── Todo.js           # 待办事项模型
+├── routes/                # API路由
+│   ├── auth.js           # 认证路由
+│   └── todos.js          # 待办事项路由
+├── middleware/
+│   └── auth.js           # 认证中间件
+├── package.json          # 项目依赖配置
+├── .env                  # 环境变量配置
+├── API.md               # API详细文档
+├── AUTH_API.md          # 认证API文档
+└── README.md            # 项目说明
 ```
 
-## 快速开始
+## 🚀 快速开始
 
-### 1. 安装依赖
+### 环境要求
+- Node.js 14.0+
+- PostgreSQL 12.0+
+- npm 或 yarn
+
+### 1. 克隆项目
+```bash
+git clone https://github.com/Al-say/Do_After.git
+cd Do_After
+```
+
+### 2. 安装依赖
 ```bash
 npm install
 ```
 
-### 2. 配置环境变量
-复制并编辑 `.env` 文件：
+### 3. 数据库配置
+创建PostgreSQL数据库并配置环境变量：
+
 ```bash
-PORT=3000
-NODE_ENV=development
+# 复制环境变量模板
+cp .env.example .env
 ```
 
-### 3. 启动开发服务器
+编辑 `.env` 文件：
+```env
+# 服务器配置
+PORT=8080
+NODE_ENV=development
+
+# PostgreSQL数据库配置
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=do_after
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+# JWT配置
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# 开发环境选项
+DB_FORCE_SYNC=false
+```
+
+### 4. 数据库初始化
+```bash
+npm run migrate
+```
+
+### 5. 启动开发服务器
 ```bash
 npm run dev
 ```
 
-### 4. 访问API
-打开浏览器访问 `http://localhost:3000` 查看API状态
+### 6. 访问应用
+- 🌐 本地访问: `http://localhost:8080`
+- 🏠 局域网访问: `http://[本机IP]:8080`
+- 📖 API文档: 查看 `API.md` 和 `AUTH_API.md` 文件
 
-## API文档
+## 📱 移动设备访问
+
+项目支持局域网访问，可在移动设备上使用：
+
+1. 确保设备连接同一WiFi网络
+2. 获取电脑IP地址: `ipconfig` (Windows) 或 `ifconfig` (Mac/Linux)
+3. 在移动设备浏览器访问: `http://[电脑IP]:8080`
+
+## 📚 API文档
+
+### 认证相关
+- `POST /api/auth/register` - 用户注册
+- `POST /api/auth/login` - 用户登录
+- `GET /api/auth/profile` - 获取用户信息
+- `PUT /api/auth/profile` - 更新用户信息
+
+### 待办事项
+- `GET /api/todos` - 获取待办事项列表
+- `POST /api/todos` - 创建待办事项
+- `GET /api/todos/:id` - 获取单个待办事项
+- `PUT /api/todos/:id` - 更新待办事项
+- `DELETE /api/todos/:id` - 删除待办事项
+- `GET /api/todos/stats/summary` - 获取统计信息
+
+详细API文档请查看：
+- 📋 [API.md](./API.md) - 完整API文档
+- 🔐 [AUTH_API.md](./AUTH_API.md) - 认证API文档
+
+## 🧪 测试
+
+```bash
+# 运行API测试
+node test-api.js
+
+# 测试数据库连接
+node test-postgresql.js
+```
+
+## 📦 NPM Scripts
+
+```bash
+npm start        # 生产环境启动
+npm run dev      # 开发环境启动(热重载)
+npm run migrate  # 数据库迁移
+npm run db:reset # 重置数据库(开发环境)
+```
+
+## 🔧 开发说明
+
+### 数据库结构
+- **users**: 用户信息表
+- **todos**: 待办事项表
+
+### 安全特性
+- JWT身份验证
+- 密码bcrypt加密
+- CORS跨域保护
+- SQL注入防护
+
+## 🤝 贡献
+
+欢迎提交Pull Request和Issue！
+
+## 📄 License
+
+ISC License
+
+---
+
+⭐ 如果这个项目对您有帮助，请给个星星！
 
 详细的API文档请查看 [API.md](./API.md) 文件。
 
